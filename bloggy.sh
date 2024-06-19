@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Step 1: Define the path to the JSON file
+# Define the path to the JSON file
 json_file="playlist_videos.json"
 
-# Step 2: Read and parse the JSON file
-# jq is a tool for processing JSON inputs
+# Read and parse the JSON file using jq
 videos=$(jq -c '.[]' $json_file)
 
-# Step 3: Iterate over each video
+# Iterate over each video
 echo "$videos" | while read -r video; do
   title=$(echo "$video" | jq -r '.title')
   url=$(echo "$video" | jq -r '.url')
@@ -18,9 +17,12 @@ echo "$videos" | while read -r video; do
   # Construct the markdown file name
   md_file="day${day}.md"
   
-  # Step 4: Execute the command for each video
-  # Note: This is a placeholder command. You'll need to replace 'yt' and 'fabric' with the actual commands or scripts
-  # that perform the operations you described.
+  # Insert video title, thumbnail, and clickable URL at the top of the markdown file
+  echo "# $title" > "$md_file"
+  echo "[![Watch the video](thumbnails/day${day}.png)]($url)" >> "$md_file"
+  echo "" >> "$md_file" # Adds an extra newline for spacing
+
+  # Execute the command for each video (Placeholder commands)
   yt --transcript "$url" | fabric --pattern create_summary --model mistral:instruct >> "$md_file"
   
   echo "Processed $md_file"
