@@ -1,7 +1,0 @@
- It appears that you are describing a Kubernetes management system that uses a configuration drift detection manager, Velos, to ensure the correct version of Kubernetes is running across clusters and to deploy specific resources (like Prometheus and Grafana) based on predefined cluster profiles. If a cluster's Kubernetes version doesn't meet the minimum requirement defined in the cluster profile, the label 'deploy-promethus' will be added to that cluster, allowing Velos to deploy the desired resources.
-
-In your example, all clusters except Civo Cluster 1 are running a Kubernetes version greater than or equal to 1270, so they will have the 'deploy-promethus' label added and get Prometheus and Grafana deployed. However, since Civo Cluster 1 is running a lower version (1264), it won't receive these additional resources because it doesn't match the cluster profile criteria.
-
-When a cluster profile is deleted, Velos will remove the resources that were deployed based on that profile from all clusters that were previously matching its criteria. This behavior can be configured to leave the deployed resources on the cluster even if it no longer meets the profile criteria.
-
-For more information about this project and related resources, you can check out the GitHub repo for Gab Project, the project documentation at project Vasvas, or connect with the developer via LinkedIn who is interested in DevOps, Kubernetes, and Project Fels. Thank you!

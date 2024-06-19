@@ -1,7 +1,0 @@
- In this message, the speaker is discussing a project they undertook for 90 days, which focused on DevOps and infrastructure as code. They used Terraform extensively during this period, and also highlighted the importance of continuous integration (CI) and continuous deployment (CD) using tools like Jenkins, Argo CD, and GitHub actions.
-
-The project covered various topics including observability, data visualization, storing and protecting data, cybersecurity threats such as ransomware, and DevSecOps. The speaker also emphasized the importance of making this knowledge accessible to everyone, irrespective of their location or resources. They focused on using Community Edition tools, open-source options, and cloud-based services.
-
-The project was divided into three parts: 2022 (which covered goang and Azure), 2023 (with focus on AWS, Red Hat OpenShift, databases, serverless service mesh, and engineering for DevOps), and now the 2024 Community Edition. The 2024 edition is planned to have 90 unique sessions with a wide range of diversity in topics, with speakers from the community.
-
-The speaker encourages everyone to learn, get involved, ask questions, and be curious. They also provide a QR code to access the project's repository. The videos for each session will be released daily, aiming to drive momentum and engage people with interesting topics and thoughts. The comments section is kept open for feedback.

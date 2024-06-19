@@ -1,55 +1,78 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 
-	"google.golang.org/api/option"
+	"google.golang.org/api/googleapi/transport"
 	"google.golang.org/api/youtube/v3"
 )
 
-func main() {
-	apiKey := os.Getenv("YOUTUBE_API_KEY")
-	playlistID := os.Getenv("YOUTUBE_PLAYLIST_ID")
+var (
+	apiKey     = os.Getenv("YOUTUBE_API_KEY")
+	playlistID = os.Getenv("YOUTUBE_PLAYLIST_ID")
+)
 
-	service, err := youtubeService(context.Background(), option.WithAPIKey(apiKey))
-	if err != nil {
-		log.Fatalf("Error creating YouTube service: %v", err)
+func main() {
+	client := &http.Client{
+		Transport: &transport.APIKey{Key: apiKey},
 	}
 
-	call := service.PlaylistItems.List([]string{"snippet"}).PlaylistId(playlistID).MaxResults(25)
+	service, err := youtube.New(client)
+	if err != nil {
+		log.Fatalf("Error creating new YouTube client: %v", err)
+	}
+
+	var allVideos []*youtube.PlaylistItem
+
+	call := service.PlaylistItems.List([]string{"snippet"}).PlaylistId(playlistID).MaxResults(50)
 	response, err := call.Do()
 	if err != nil {
 		log.Fatalf("Error making API call: %v", err)
 	}
 
-	videos := make([]map[string]string, 0)
-	for _, item := range response.Items {
-		video := map[string]string{
-			"title": item.Snippet.Title,
-			"url":   fmt.Sprintf("https://www.youtube.com/watch?v=%s", item.Snippet.ResourceId.VideoId),
+	allVideos = append(allVideos, response.Items...)
+
+	for response.NextPageToken != "" {
+		call = service.PlaylistItems.List([]string{"snippet"}).PlaylistId(playlistID).MaxResults(50).PageToken(response.NextPageToken)
+		response, err = call.Do()
+		if err != nil {
+			log.Fatalf("Error fetching next page of videos: %v", err)
 		}
-		videos = append(videos, video)
+		allVideos = append(allVideos, response.Items...)
 	}
 
-	file, err := os.Create("playlist_videos.json")
+	// Simplify the video data for output
+	type SimpleVideo struct {
+		Title string `json:"title"`
+		URL   string `json:"url"`
+	}
+
+	var simpleVideos []SimpleVideo
+
+	for _, item := range allVideos {
+		video := SimpleVideo{
+			Title: item.Snippet.Title,
+			URL:   "https://www.youtube.com/watch?v=" + item.Snippet.ResourceId.VideoId,
+		}
+		simpleVideos = append(simpleVideos, video)
+	}
+
+	// Convert the simplified video data to JSON
+	jsonData, err := json.MarshalIndent(simpleVideos, "", "  ")
 	if err != nil {
-		log.Fatalf("Error creating file: %v", err)
+		log.Fatalf("Error converting data to JSON: %v", err)
 	}
-	defer file.Close()
 
-	encoder := json.NewEncoder(file)
-	err = encoder.Encode(videos)
+	// Write the JSON data to a file named playlist_videos.json
+	err = ioutil.WriteFile("playlist_videos.json", jsonData, 0644)
 	if err != nil {
-		log.Fatalf("Error encoding videos to JSON: %v", err)
+		log.Fatalf("Error writing JSON data to file: %v", err)
 	}
 
-	fmt.Println("Exported playlist video data to playlist_videos.json")
-}
-
-func youtubeService(ctx context.Context, opts ...option.ClientOption) (*youtube.Service, error) {
-	return youtube.NewService(ctx, opts...)
+	fmt.Println("Playlist data exported to playlist_videos.json")
 }

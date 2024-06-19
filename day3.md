@@ -1,7 +1,0 @@
- The speaker is discussing various software development metrics such as Throughput, Success Rate, Duration, and Median Workflow Runs. These metrics can help measure the performance of teams in terms of how often they are committing changes to their codebase (throughput), the success rate of those changes, the time it takes for changes to be implemented (duration), and the number of workflow runs per day.
-
-The speaker emphasizes that while throughput is an important metric, it should not be the sole focus as it does not necessarily reflect the quality or impact of the work being done. Instead, teams should strive to improve on all related metrics such as the time it takes for changes to complete, the frequency of failures, and the recovery time from those failures.
-
-The speaker also suggests that organizations should set their own throughput goals based on their internal business requirements, resources, and user expectations rather than aiming for universal targets. They recommend capturing a baseline measurement, monitoring fluctuations over time, and adjusting practices to improve performance.
-
-Finally, the speaker encourages teams to track these key metrics to gain insights into their performance and continuously optimize them as necessary. They also recommend checking out reports like the State of DevOps and the State of Continuous Delivery for additional information and insights.
