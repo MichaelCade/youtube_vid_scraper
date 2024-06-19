@@ -98,6 +98,9 @@ Final Output: After processing all videos, it prints a message indicating all vi
 ![](process.png)
 
 
+## Thumbnails 
+
+You will notice a thumbnails folder this is only here for now to test the outcome, this should not be used by anyone else wanting to achieve this. ß
 
 
 ## License
