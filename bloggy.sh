@@ -24,6 +24,7 @@ echo "$videos" | while read -r video; do
 
   # Execute the command for each video (Placeholder commands)
   yt --transcript "$url" | fabric --pattern create_summary --model mistral:instruct >> "$md_file"
+  yt --transcript "$url" | fabric --pattern create_summary --model llama3:latest >> "$md_file"
   
   echo "Processed $md_file"
 done
